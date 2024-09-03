@@ -9,13 +9,24 @@
 <body>
     <div id="app">
         <h1>לימוד לוח הכפל</h1>
+        <div id="settings-container">
+            <label for="max-multiplicand">ערך מקסימלי של המוכפל:</label>
+            <input type="number" id="max-multiplicand" value="10">
+            <label for="max-multiplier">ערך מקסימלי של המכפיל:</label>
+            <input type="number" id="max-multiplier" value="10">
+            <button id="update-question" onclick="generateQuestion()">עדכן שאלה</button>
+        </div>
         <div id="question-container">
             <div id="visualization"></div>
-            <span id="multiplicand"></span> × <span id="multiplier"></span> = 
-            <input type="number" id="answer" placeholder="הכנס תשובה">
-            <button onclick="checkAnswer()">בדוק</button>
+            <div id="question">
+                <span id="multiplicand"></span> × <span id="multiplier"></span> = 
+                <input type="number" id="answer" placeholder="הכנס תשובה">
+                <button onclick="checkAnswer()">בדוק</button>
+                <button id="next-question" onclick="confirmNextQuestion()" style="display:none; background-color: orange;">לשאלה הבאה</button>
+                <button id="show-answer" onclick="showAnswer()" style="background-color: red;">הצג תשובה</button>
+            </div>
         </div>
-        <div id="feedback"></div>
+        <div id="feedback" class="feedback-box"></div>
         <div id="fireworks"></div>
         <audio id="correct-sound" src="correct-sound.mp3"></audio>
     </div>
