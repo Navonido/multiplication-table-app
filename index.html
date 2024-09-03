@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>לימוד לוח הכפל</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <h1>לימוד לוח הכפל</h1>
+        <div id="question-container">
+            <div id="visualization"></div>
+            <span id="multiplicand"></span> × <span id="multiplier"></span> = 
+            <input type="number" id="answer" placeholder="הכנס תשובה">
+            <button onclick="checkAnswer()">בדוק</button>
+        </div>
+        <div id="feedback"></div>
+        <div id="fireworks"></div>
+        <audio id="correct-sound" src="correct-sound.mp3"></audio>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
