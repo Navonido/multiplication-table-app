@@ -1,122 +1,146 @@
-let maxMultiplier = document.getElementById("maxMultiplier").value;
-let maxMultiplicand = document.getElementById("maxMultiplicand").value;
-let questionMultiplierElement = document.getElementById("questionMultiplier");
-let questionSignElement = document.getElementById("questionSign");
-let questionMultiplicandElement = document.getElementById("questionMultiplicand");
-let feedbackElement = document.getElementById("feedback");
-let visualizationElement = document.getElementById("visualization");
-let correctAnswer;
-const correctSound = document.getElementById("correctSound");
-const bodyElement = document.body;
+let multiplicand, multiplier;
+let attempts = 0;
+let backgroundImages = ['background1.jpg', 'background2.jpg'];
+let currentBackgroundIndex = 0;
+
+window.onload = function() {
+    generateQuestion();
+}
 
 function generateQuestion() {
-    let multiplier = Math.floor(Math.random() * maxMultiplier) + 1;
-    let multiplicand = Math.floor(Math.random() * maxMultiplicand) + 1;
-    correctAnswer = multiplier * multiplicand;
-    questionMultiplierElement.innerHTML = multiplier;
-    questionSignElement.innerHTML = ' × ';
-    questionMultiplicandElement.innerHTML = multiplicand;
-    createVisualization(multiplier, multiplicand);
-    switchBackground();
+    const maxMultiplicand = parseInt(document.getElementById('max-multiplicand').value);
+    const maxMultiplier = parseInt(document.getElementById('max-multiplier').value);
+
+    multiplicand = Math.floor(Math.random() * maxMultiplicand) + 1;
+    multiplier = Math.floor(Math.random() * maxMultiplier) + 1;
+
+    document.getElementById('multiplicand').textContent = multiplicand;
+    document.getElementById('multiplier').textContent = multiplier;
+    document.getElementById('answer').value = '';
+    document.getElementById('feedback').textContent = '';
+    document.getElementById('next-question').style.display = 'none';
+    attempts = 0;
+
+    createVisualization(multiplicand, multiplier);
+    toggleBackgroundImage();
 }
 
-function createVisualization(multiplier, multiplicand) {
-    visualizationElement.innerHTML = '';
-    for (let i = 0; i < multiplicand; i++) {
-        let row = document.createElement('div');
-        for (let j = 0; j < multiplier; j++) {
-            let circle = document.createElement('div');
-            circle.classList.add('circle');
-            row.appendChild(circle);
+function toggleBackgroundImage() {
+    currentBackgroundIndex = (currentBackgroundIndex + 1) % backgroundImages.length;
+    if (currentBackgroundIndex === 1) {
+        document.body.classList.add('tile');  // Apply TILE layout for background2
+    } else {
+        document.body.classList.remove('tile');  // Remove TILE layout for other backgrounds
+    }
+    document.body.style.backgroundImage = `url(${backgroundImages[currentBackgroundIndex]})`;
+}
+
+function createVisualization(multiplicand, multiplier) {
+    const visualization = document.getElementById('visualization');
+    visualization.innerHTML = '';
+    visualization.style.gridTemplateColumns = `repeat(${multiplier}, auto)`;
+
+    for (let i = 0; i < multiplicand * multiplier; i++) {
+        const circle = document.createElement('div');
+        circle.className = 'circle';
+        visualization.appendChild(circle);
+    }
+}
+
+function checkAnswer() {
+    const answer = parseInt(document.getElementById('answer').value);
+    attempts++;
+    if (answer === multiplicand * multiplier) {
+        showSuccess();
+    } else {
+        document.getElementById('feedback').textContent = "כמעט! נסה שוב.";
+        document.getElementById('feedback').style.color = 'red';
+        if (attempts > 0) {
+            document.getElementById('next-question').style.display = 'inline-block';
         }
-        visualizationElement.appendChild(row);
-    }
-    visualizationElement.style.textAlign = 'center';
-}
-
-function showFeedback(isCorrect) {
-    feedbackElement.innerHTML = isCorrect ? 'כל הכבוד!' : 'נסה שוב!';
-    feedbackElement.style.backgroundColor = isCorrect ? '#00FF00' : '#FF0000';
-    feedbackElement.style.display = 'block';
-    if (isCorrect) {
-        playFireworks();
-        playCorrectSound();
     }
 }
 
-function playCorrectSound() {
-    correctSound.play();
+function showSuccess() {
+    document.getElementById('feedback').textContent = "כל הכבוד!";
+    document.getElementById('feedback').style.color = 'green';
+
+    const sound = document.getElementById('correct-sound');
+    sound.play();
+
+    triggerFireworks();
+    
+    setTimeout(generateQuestion, 3000);  // Automatically generate next question after 3 seconds
 }
 
-function playFireworks() {
-    const fireworksContainer = document.createElement('div');
-    fireworksContainer.classList.add('fireworks-container');
-    document.body.appendChild(fireworksContainer);
+function triggerFireworks() {
+    const fireworksContainer = document.getElementById('fireworks');
+    fireworksContainer.style.display = 'block';
 
     for (let i = 0; i < 10; i++) {
-        let firework = document.createElement('div');
-        firework.classList.add('firework');
-        firework.style.left = Math.random() * 100 + '%';
-        firework.style.top = Math.random() * 100 + '%';
+        const firework = document.createElement('div');
+        firework.className = 'firework';
+        firework.style.left = `${Math.random() * 100}%`;
+        firework.style.top = `${Math.random() * 100}%`;
+        firework.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
         fireworksContainer.appendChild(firework);
+
+        setTimeout(() => {
+            fireworksContainer.removeChild(firework);
+        }, 1000);
     }
 
     setTimeout(() => {
-        fireworksContainer.remove();
-    }, 3000); // Remove after 3 seconds
+        fireworksContainer.style.display = 'none';
+    }, 2000);
 }
 
-function switchBackground() {
-    const currentBackground = bodyElement.style.backgroundImage.includes('background1.jpg') ? 'background2.jpg' : 'background1.jpg';
-    bodyElement.style.backgroundImage = `url(${currentBackground})`;
-    bodyElement.style.backgroundSize = 'contain'; // Changed to contain for TILE effect
-    bodyElement.style.backgroundRepeat = 'repeat'; // Set to repeat for TILE effect
+function showAnswer() {
+    document.getElementById('feedback').textContent = 'התשובה הנכונה מוצגת. ראה את הסכימה הגרפית:';
+    document.getElementById('feedback').style.color = 'blue';
+
+    animateSumVisualization(multiplicand, multiplier);
 }
 
-document.getElementById("updateQuestion").addEventListener("click", () => {
-    maxMultiplier = document.getElementById("maxMultiplier").value;
-    maxMultiplicand = document.getElementById("maxMultiplicand").value;
-    generateQuestion();
-});
+function animateSumVisualization(multiplicand, multiplier) {
+    const visualization = document.getElementById('visualization');
+    let sum = 0;
+    let currentRow = 0;
 
-document.getElementById("submitAnswer").addEventListener("click", () => {
-    let userAnswer = document.getElementById("answer").value;
+    const interval = setInterval(() => {
+        const rowStartIndex = currentRow * multiplier;
+        const rowEndIndex = rowStartIndex + multiplier;
 
-    if (parseInt(userAnswer) === correctAnswer) {
-        showFeedback(true);
-        setTimeout(() => {
-            generateQuestion();
-            feedbackElement.style.display = 'none';
-            document.getElementById("answer").value = '';
-        }, 2000);
-    } else {
-        showFeedback(false);
-    }
-});
+        // Color the current row circles
+        for (let i = rowStartIndex; i < rowEndIndex; i++) {
+            const circle = visualization.children[i];
+            circle.style.backgroundColor = 'yellow';
+        }
 
-document.getElementById("nextQuestion").addEventListener("click", () => {
+        sum += multiplier;
+
+        // Display cumulative sum to the left of the current row
+        const sumElement = document.createElement('div');
+        sumElement.className = 'sum-element';
+        sumElement.textContent = `סך הכל עד כה: ${sum}`;
+        sumElement.style.color = 'white';
+        sumElement.style.gridColumn = `1 / span ${multiplier}`;
+        sumElement.style.gridRow = `${currentRow + 1}`;
+        sumElement.style.justifySelf = 'start';
+
+        visualization.appendChild(sumElement);
+
+        currentRow++;
+
+        if (currentRow >= multiplicand) {
+            clearInterval(interval);
+            document.getElementById('feedback').textContent += ` סך הכל: ${sum}`;
+        }
+    }, 1000);
+}
+
+function confirmNextQuestion() {
     if (confirm("האם אתה בטוח שברצונך לעבור לשאלה הבאה?")) {
         generateQuestion();
-        feedbackElement.style.display = 'none';
-        document.getElementById("answer").value = '';
     }
-});
-
-document.getElementById("showAnswer").addEventListener("click", () => {
-    let sum = 0;
-    visualizationElement.innerHTML = '';
-    for (let i = 0; i < correctAnswer / questionMultiplierElement.innerHTML; i++) {
-        let row = document.createElement('div');
-        sum += parseInt(questionMultiplierElement.innerHTML);
-        for (let j = 0; j < parseInt(questionMultiplierElement.innerHTML); j++) {
-            let circle = document.createElement('div');
-            circle.classList.add('circle');
-            row.appendChild(circle);
-        }
-        row.innerHTML += ` = ${sum}`;
-        visualizationElement.appendChild(row);
-    }
-    visualizationElement.style.textAlign = 'center';
-});
-
-window.onload = generateQuestion;
+}
