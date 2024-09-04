@@ -1,88 +1,111 @@
 body {
-    background-image: url('background1.jpg');
-    background-size: cover;  /* Fit to screen */
-    background-repeat: no-repeat;
-    background-position: center;
-    transition: background-image 1s ease-in-out;
     font-family: Arial, sans-serif;
-}
-
-body.tile {
-    background-image: url('background2.jpg');
-    background-size: auto;  /* TILE layout */
-    background-repeat: repeat;
-    background-position: center;
-}
-
-/* שאר הקוד נשאר זהה */
-
-#app {
+    color: #333;
     text-align: center;
-    color: white;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: auto;
     padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    background: url('background1.jpg') repeat;
 }
 
-#settings-container {
+h1 {
+    color: #333;
+}
+
+.controls {
     margin-bottom: 20px;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0.5); /* Background for visibility */
-    padding: 10px;
-    border-radius: 10px;
 }
 
-#settings-container label, #settings-container input, #settings-container button {
-    background-color: rgba(255, 255, 255, 0.8); /* Light background for inputs */
-    color: black;
-    padding: 5px;
-    border-radius: 5px;
+.controls label {
     margin-right: 10px;
 }
 
-#question-container {
-    font-size: 24px;
-    margin-bottom: 20px;
-    background-color: rgba(0, 0, 0, 0.5); /* Background for visibility */
-    padding: 20px;
-    border-radius: 10px;
+.controls input {
+    width: 60px;
+    padding: 5px;
+    margin-right: 20px;
 }
 
-#visualization {
-    display: grid;
-    gap: 5px;
-    justify-content: center;
-}
-
-.sum-element {
-    justify-self: start;
-    align-self: center;
+.update-btn, .submit-btn, .next-btn, .show-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
     font-size: 16px;
-    margin-left: -50px; /* Adjust this value to position the sum correctly */
+}
+
+.update-btn {
+    background-color: #ffa500; /* Orange */
+    color: white;
+}
+
+.submit-btn {
+    background-color: #0000ff; /* Blue */
+    color: white;
+}
+
+.next-btn {
+    background-color: #ffa500; /* Orange */
+    color: white;
+}
+
+.show-btn {
+    background-color: #ff0000; /* Red */
+    color: white;
+}
+
+.question-container {
+    margin: 20px 0;
+}
+
+.visualization {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.visualization div {
+    display: flex;
+    justify-content: center;
 }
 
 .circle {
     width: 20px;
     height: 20px;
-    background-color: lightblue;
     border-radius: 50%;
+    background-color: #007bff;
+    margin: 2px;
 }
 
-
-#feedback {
-    font-size: 20px;
-    margin-top: 20px;
+.feedback {
+    padding: 10px;
+    margin: 20px 0;
+    color: #fff;
+    font-weight: bold;
+    display: none;
+    border-radius: 5px;
 }
 
-#fireworks {
+.fireworks-container {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    display: none;
     pointer-events: none;
+    overflow: hidden;
 }
 
 .firework {
@@ -90,24 +113,32 @@ body.tile {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: red;
-    animation: explode 1s ease-out forwards;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 80%);
+    animation: explode 1s ease-out;
 }
 
 @keyframes explode {
-    from {
+    0% {
         transform: scale(1);
+        opacity: 1;
     }
-    to {
+    100% {
         transform: scale(5);
         opacity: 0;
     }
 }
 
-.feedback-box {
-    background-color: white;
-    color: green;
-    padding: 10px;
-    border-radius: 5px;
-    display: inline-block;
+@media only screen and (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+
+    .controls input {
+        width: 50px;
+    }
+
+    .update-btn, .submit-btn, .next-btn, .show-btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
 }

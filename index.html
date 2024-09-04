@@ -3,33 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>לימוד לוח הכפל</title>
+    <title>לוח הכפל</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="app">
-        <h1>לימוד לוח הכפל</h1>
-        <div id="settings-container">
-            <label for="max-multiplicand">ערך מקסימלי של המוכפל:</label>
-            <input type="number" id="max-multiplicand" value="10">
-            <label for="max-multiplier">ערך מקסימלי של המכפיל:</label>
-            <input type="number" id="max-multiplier" value="10">
-            <button id="update-question" onclick="generateQuestion()">עדכן שאלה</button>
+    <div class="container">
+        <h1>לוח הכפל</h1>
+        <div class="controls">
+            <label for="maxMultiplier">מכפיל מקסימלי:</label>
+            <input type="number" id="maxMultiplier" value="10" min="1" max="20">
+            <label for="maxMultiplicand">מוכפל מקסימלי:</label>
+            <input type="number" id="maxMultiplicand" value="10" min="1" max="20">
+            <button id="updateQuestion" class="update-btn">עדכן שאלה</button>
         </div>
-        <div id="question-container">
-            <div id="visualization"></div>
-            <div id="question">
-                <span id="multiplicand"></span> × <span id="multiplier"></span> = 
-                <input type="number" id="answer" placeholder="הכנס תשובה">
-                <button onclick="checkAnswer()">בדוק</button>
-                <button id="next-question" onclick="confirmNextQuestion()" style="display:none; background-color: orange;">לשאלה הבאה</button>
-                <button id="show-answer" onclick="showAnswer()" style="background-color: red;">הצג תשובה</button>
-            </div>
+        <div id="questionContainer" class="question-container">
+            <span id="questionMultiplier" class="question"></span>
+            <span id="questionSign" class="question"> × </span>
+            <span id="questionMultiplicand" class="question"></span>
+            <input type="number" id="answer" placeholder="תשובה">
         </div>
-        <div id="feedback" class="feedback-box"></div>
-        <div id="fireworks"></div>
-        <audio id="correct-sound" src="correct-sound.mp3"></audio>
+        <div id="visualization" class="visualization"></div>
+        <div class="buttons">
+            <button id="submitAnswer" class="submit-btn">שלח</button>
+            <button id="nextQuestion" class="next-btn">שאלה הבאה</button>
+            <button id="showAnswer" class="show-btn">הצג תשובה</button>
+        </div>
+        <div id="feedback" class="feedback"></div>
     </div>
+    <audio id="correctSound" src="correct-sound.mp3"></audio>
     <script src="script.js"></script>
 </body>
 </html>
